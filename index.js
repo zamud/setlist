@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./src/server/db');
+const routes = require('./src/routes/jam-routes');
 
 const app = express();
 const apiPort = 3000;
@@ -9,6 +10,8 @@ const apiPort = 3000;
 app.use(bodyParser.urlencoded( {extended: true }));
 app.use(cors());
 app.use(bodyParser.json());
+
+routes(app);
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
