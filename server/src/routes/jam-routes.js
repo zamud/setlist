@@ -7,7 +7,11 @@ const routes = (app) => {
       console.log(`Request type: ${req.method}`);
       next();
     }, JamController.getJams)
-    .post(JamController.addNewJam);
+    .post((req, res, next) => {
+      console.log(`Request from: ${req.originalUrl}`);
+      console.log(`Request type: ${req.method}`);
+      next();
+    },JamController.addNewJam);
 
   app.route('/jams/:jamID')
     .get((req, res, next) => {

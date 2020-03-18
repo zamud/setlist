@@ -15,24 +15,21 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      jams: [],
-      isLoading: false
+      jams: []
     };
   }
 
   componentDidMount = async () => {
-    this.setState({ isLoading: true });
 
     await api.getJams()
       .then((jams) => {
         this.setState({
-          jams: jams.data,
-          isLoading: false
+          jams: jams.data
         });
       });
   }
 
-  render() {
+  render () {
     const { jams } = this.state;
     return(
       <MainContainer>

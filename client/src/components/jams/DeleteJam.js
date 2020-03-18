@@ -15,17 +15,18 @@ class DeleteJam extends Component {
     }
   }
   
-  handleDelete = event => {
+  handleDelete = async event => {
     event.preventDefault();
 
     if(window.confirm(`Delete \"${this.props.jam.title}\" permanently?"`)) {
-      api.deleteJam(this.props.jam._id);
-      this.setState({ isDeleted: true })
+      await api.deleteJam(this.props.jam._id)
+        .then(res => this.setState({ isDeleted: true }));
     }
   }
 
   render() {
     if(this.state.isDeleted) {
+      setTimeout(console.log("DELETED"), 5000)
       return (
         <Redirect to='/' />
       )
