@@ -9,7 +9,7 @@ const JamList = ({jams}) => {
         {jams && jams.map((jam) => {
           return (
             <div className="col m3 s6" key={jam._id}>
-              <Link to={'/jams/' + jam._id }>
+              <Link to={`/jams/${jam._id}`}>
                 <JamSummary jam={jam} key={jam._id} />
               </Link>
             </div>

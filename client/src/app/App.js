@@ -4,6 +4,7 @@ import NavBar from '../components/layout/NavBar';
 import Dashboard from '../components/dashboard/Dashboard';
 import CreateJam from '../components/jams/CreateJam';
 import JamDetails from '../components/jams/JamDetails';
+import UpdateJam from '../components/jams/UpdateJam';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
@@ -16,6 +17,7 @@ class App extends Component {
           <Route path='/index' component={Dashboard} />
           <Route path='/create' component={CreateJam} />
           <Route path='/jams/:id' component={JamDetails} />
+          <Route path='/update/:id' component={UpdateJam} />
         </Switch>
       </BrowserRouter>
     );

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import DeleteJam from './DeleteJam';
 import ReactPlayer from 'react-player';
 import styled from 'styled-components';
@@ -11,6 +12,13 @@ const JamContainer = styled.div.attrs({
   margin-left: 14%;
   width: 72%;
 `
+
+const Edit = styled.button.attrs({
+  className: 'btn btn-secondary',
+})`
+  margin-left: 30px;
+`
+
 
 class JamDetails extends Component {
   
@@ -69,6 +77,9 @@ class JamDetails extends Component {
             </div>
           </div>
             <DeleteJam jam={jam} />
+            <Link to={`/update/${jam._id}`}>
+              <Edit>Edit Jam</Edit>
+            </Link>
           </JamContainer>
         )
       } else {

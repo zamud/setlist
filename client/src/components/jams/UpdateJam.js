@@ -11,7 +11,7 @@ const JamContainer = styled.div.attrs({
   width: 72%;
 `
 
-class CreateJam extends Component {
+class UpdateJam extends Component {
   state = {
     title: "",
     artist: "",
@@ -21,6 +21,24 @@ class CreateJam extends Component {
     myCapo: 0,
     tabLink: "",
     vidLink: ""
+  }
+
+  componentDidMount = async() => {
+    await api.getJamWithID(this.props.match.params.id)
+      .then((jam) => {
+        console.log("GOT THE JAM");
+        console.log(jam);
+        this.setState({
+          title: jam.data.title,
+          artist: jam.data.artist,
+          genre: jam.data.genre,
+          decade: jam.data.decade,
+          isFavorite: jam.data.isFavorite,
+          myCapo: jam.data.myCapo,
+          tabLink: jam.data.tabLink,
+          vidLink: jam.data.vidLink
+        });
+      });
   }
 
   handleChange = event => {
@@ -39,38 +57,38 @@ class CreateJam extends Component {
 
   handleSubmit =  async event => {
     event.preventDefault();
-    await api.addNewJam(this.state)
+    await api.updateJam(this.props.match.params.id, this.state)
       .then(res => 
           this.setState({
-          title: "JAMCREATED"
+          title: "JAMUPDATED"
         })
       );
   }
 
   render() {
-    if(this.state.title === "JAMCREATED") {
+    if(this.state.title === "JAMUPDATED") {
       return (
         <Redirect to='/' />
       )
     }
     return(
       <JamContainer>
-        <h4>Add a New Jam</h4>
+        <h4>Edit {this.state.title}</h4>
         <form onSubmit={this.handleSubmit}>
           <div className="row">
             <div className="col m6 s12 form-group">
               <label htmlFor="title">Title:</label>
-              <input type="text" id="title" className="form-control" onChange={this.handleChange}/>
+              <input type="text" id="title" className="form-control" value={this.state.title} onChange={this.handleChange}/>
             </div>
             <div className="col m6 s12 form-group">
               <label htmlFor="artist">Artist:</label>
-              <input type="text" id="artist" className="form-control" onChange={this.handleChange}/>
+              <input type="text" id="artist" className="form-control" value={this.state.artist} onChange={this.handleChange}/>
             </div>
           </div>
           <div className="row">
             <div className="col m4 s12 form-group">
               <label htmlFor="decade">Decade</label>
-              <select defaultValue="" id="decade" className="form-control" onChange={this.handleChange}>
+              <select defaultValue="" id="decade" className="form-control" value={this.state.decade} onChange={this.handleChange}>
                 <option value="" disabled>Choose a decade</option>
                 <option value="2010">2010s</option>
                 <option value="2000">2000s</option>
@@ -83,7 +101,7 @@ class CreateJam extends Component {
             </div>
             <div className="col m4 s12 form-group">
               <label htmlFor="genre">Genre</label>
-              <select multiple defaultValue={['']} className="form-control" id="genre" onChange={this.handleChange}>
+              <select multiple defaultValue={['']} className="form-control" id="genre" value={this.state.genre} onChange={this.handleChange}>
                 <option value="" disabled>Choose genre(s)</option>
                 <option value="pop">Pop</option>
                 <option value="rock">Rock</option>
@@ -97,7 +115,7 @@ class CreateJam extends Component {
             </div>
             <div className="col m2 s6 form-group">
             <label htmlFor="myCapo">MyCapo</label>
-              <select id="myCapo" className="form-control" onChange={this.handleChange}>
+              <select id="myCapo" className="form-control" value={this.state.myCapo} onChange={this.handleChange}>
                 <option value="" disabled>Preferred capo position</option>
                 <option value="0">No capo</option>
                 <option value="1">1</option>
@@ -114,7 +132,11 @@ class CreateJam extends Component {
             <div className="col m2 s6 input-field">
               <div className="grey-text lighten-1">Favorite?</div>
               <div className="custom-control custom-switch">
-                <input type="checkbox" className="custom-control-input" id="isFavorite" onChange={this.handleChange} />
+                {
+                  (this.state.isFavorite)
+                    ? <input type="checkbox" className="custom-control-input" id="isFavorite" onChange={this.handleChange} checked />
+                    : <input type="checkbox" className="custom-control-input" id="isFavorite" onChange={this.handleChange} />
+                }
                 <label className="custom-control-label" htmlFor="isFavorite"></label>
               </div>
             </div>
@@ -139,4 +161,4 @@ class CreateJam extends Component {
 }
 
 
-export default CreateJam;
+export default UpdateJam;
