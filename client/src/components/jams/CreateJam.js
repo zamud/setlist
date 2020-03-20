@@ -17,7 +17,6 @@ class CreateJam extends Component {
     artist: "",
     genre: "",
     decade: 0,
-    lastPlayed: (new Date()).getMonth()+'/'+(new Date()).getDate()+'/'+(new Date()).getFullYear(),
     isFavorite: false,
     myCapo: 0,
     tabLink: "",
@@ -25,19 +24,27 @@ class CreateJam extends Component {
   }
 
   handleChange = event => {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
+    if(event.target.id === 'isFavorite') {
+      if(event.target.value === 'on') {
+        this.setState({
+          [event.target.id]: true
+        });
+      }
+    } else {
+      this.setState({
+        [event.target.id]: event.target.value
+      });
+    }
   }
 
   handleSubmit =  async event => {
     event.preventDefault();
-    console.log("SUBMITTING");
-    console.log(this.state);
     await api.addNewJam(this.state)
-      .then(res => this.setState({
-        title: "JAMCREATED"
-      }));
+      .then(res => 
+          this.setState({
+          title: "JAMCREATED"
+        })
+      );
   }
 
   render() {
@@ -76,7 +83,7 @@ class CreateJam extends Component {
             </div>
             <div className="col m4 s12 form-group">
               <label htmlFor="genre">Genre</label>
-              <select multiple defaultValue={['']} className="form-control" id="genre">
+              <select multiple defaultValue={['']} className="form-control" id="genre" onChange={this.handleChange}>
                 <option value="" disabled>Choose genre(s)</option>
                 <option value="pop">Pop</option>
                 <option value="rock">Rock</option>
@@ -106,9 +113,9 @@ class CreateJam extends Component {
             </div>
             <div className="col m2 s6 input-field">
               <div className="grey-text lighten-1">Favorite?</div>
-              <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="isFavorite" />
-                <label class="custom-control-label" for="isFavorite"></label>
+              <div className="custom-control custom-switch">
+                <input type="checkbox" className="custom-control-input" id="isFavorite" onChange={this.handleChange} />
+                <label className="custom-control-label" htmlFor="isFavorite"></label>
               </div>
             </div>
           </div>

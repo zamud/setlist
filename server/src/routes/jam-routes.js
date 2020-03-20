@@ -10,6 +10,10 @@ const routes = (app) => {
     .post((req, res, next) => {
       console.log(`Request from: ${req.originalUrl}`);
       console.log(`Request type: ${req.method}`);
+      res.on('finish', () => {
+        console.log("STATUS CODE");
+        console.log(`${res.statusCode}`);
+      });
       next();
     },JamController.addNewJam);
 

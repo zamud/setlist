@@ -7,7 +7,6 @@ const JamList = ({jams}) => {
     <div className="jam-list section">
       <div className="row">
         {jams && jams.map((jam) => {
-          console.log(jam);
           return (
             <div className="col m3 s6" key={jam._id}>
               <Link to={'/jams/' + jam._id }>
