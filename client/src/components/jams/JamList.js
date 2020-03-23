@@ -8,7 +8,7 @@ const JamList = ({jams}) => {
       <div className="row">
         {jams && jams.map((jam) => {
           return (
-            <div className="col m3 s6" key={jam._id}>
+            <div className="col-4" key={jam._id}>
               <Link to={`/jams/${jam._id}`}>
                 <JamSummary jam={jam} key={jam._id} />
               </Link>

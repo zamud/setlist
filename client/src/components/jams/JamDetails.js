@@ -13,31 +13,59 @@ const JamContainer = styled.div.attrs({
   width: 72%;
 `
 
-const Edit = styled.button.attrs({
+const GreyButton = styled.button.attrs({
   className: 'btn btn-secondary',
+})``
+
+const Edit = styled.button.attrs({
+  className: 'btn btn-dark',
 })`
   margin-left: 30px;
 `
 
+const NoVidLinkBox = styled.div.attrs({
+})`
+  text-align: center;
+  padding-top: 20%;
+  padding-bottom: 20%;
+  background: GREY;
+  color: WHITE;
+`
+
+const VidInput = styled.input.attrs({
+  className: 'form-control',
+  type: 'text',
+  id: 'jam.vidLink',
+})`
+  width: 40%;
+  margin-left: 30%
+`
 
 class JamDetails extends Component {
   
   constructor(props) {
     super(props);
     this.state = {
-      jam: [],
-      isLoading: false
+      jam: []
     };
   }
 
-  componentDidMount = async() => {
-    this.setState({ isLoading: true });
-
+  componentDidMount = async () => {
     await api.getJamWithID(this.props.match.params.id)
       .then((jam) => {
         this.setState({
-          jam: jam,
-          isLoading: false
+          jam: jam
+        });
+      });
+  }
+
+  markPlayed = async () => {
+    await api.updateJam(this.props.match.params.id, {
+      lastPlayed: Date.now()
+    })
+      .then((jam) =>{
+        this.setState({
+          jam: jam
         });
       });
   }
@@ -47,35 +75,39 @@ class JamDetails extends Component {
       if(jam) {
         return(
           <JamContainer>
-          <h4>"{jam.title}" - {jam.artist}</h4>
-          <div className="row">
-            <div className="col m8 s12">
-              <ReactPlayer url={jam.vidLink} controls width="90%" />
+            <div className="row">
+              <h4>"{jam.title}" - {jam.artist}</h4>
             </div>
-            <div className="col m4 s12">
-              <p><strong>Genre: </strong>{jam.genre}</p>
-              <p><strong>Decade: </strong>{jam.decade}</p>
-              <p><strong>MyCapo: </strong>{jam.myCapo}</p>
-              <p><strong>Last Practiced: </strong>{jam.lastPlayed}</p>
-              <p>
-                <a href={jam.tabLink} target="_blank">
-                  <button className="btn grey">
-                    Open Tab
-                  </button>
-                </a>
-              </p>
-              <p>
-                <button className="btn grey">
-                  Mark as Played Today
-                </button>
-              </p>
-              <p>
-                <button className="btn grey">
-                  Edit Jam
-                </button>
-              </p>
+            <div className="row">
+              <div className="col-4">
+                <br />
+                <p><strong>Genre: </strong>{jam.genre}</p>
+                <p><strong>Decade: </strong>{jam.decade}</p>
+                <p><strong>MyCapo: </strong>{jam.myCapo}</p>
+                <p><strong>Last Practiced: </strong>{jam.lastPlayed.substring(0, 10)}</p>
+                <p>
+                  {
+                    jam.tabLink
+                    ? <a href={jam.tabLink} target="_blank"><GreyButton>Open Tab</GreyButton></a>
+                    : <p><i>Click "Edit Jam" to add a tab</i></p>
+                  }
+                </p>
+                <p>
+                  <GreyButton onClick={this.markPlayed}> Mark as Played Today</GreyButton>
+                </p>
+              </div>
+              <div className="col-8">
+                {
+                  jam.vidLink
+                  ? <ReactPlayer url={jam.vidLink} controls width="90%" />
+                  : <NoVidLinkBox>
+                      <h5>NO VIDEO</h5>
+                      <p>Click "Edit Jam" and add a video link</p>
+                    </NoVidLinkBox>
+                }
+                
+              </div>
             </div>
-          </div>
             <DeleteJam jam={jam} />
             <Link to={`/update/${jam._id}`}>
               <Edit>Edit Jam</Edit>

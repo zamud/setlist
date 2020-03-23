@@ -20,7 +20,8 @@ class CreateJam extends Component {
     isFavorite: false,
     myCapo: 0,
     tabLink: "",
-    vidLink: ""
+    vidLink: "",
+    lastPlayed: Date.now()
   }
 
   handleChange = event => {
