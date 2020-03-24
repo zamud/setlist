@@ -53,8 +53,6 @@ class Dashboard extends Component {
 }
 
   render () {
-    console.log("RENDER STATE")
-    console.log(this.state);
     return(
       <MainContainer>
         <FiltersAndLogo 
