@@ -10,16 +10,14 @@ const Nav = styled.nav.attrs({
   className: 'navbar navbar-expand-lg navbar-dark bg-dark',
 })``
 
-class NavBar extends Component {
-  render() {
-    return(
-      <Container>
-        <Nav>
-          <Links />
-        </Nav>
-      </Container>
-    )
-  }
+const NavBar = () => {
+  return (
+    <Container>
+      <Nav>
+        <Links />
+      </Nav>
+    </Container>
+  )
 }
 
 export default NavBar;

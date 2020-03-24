@@ -49,65 +49,52 @@ const ToggleLabel = styled.label.attrs({})`
   margin-left: 10px;
 `
 
-class FiltersAndLogo extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      genreFilter: "",
-      decadeFilter: "",
-      showFavorites: false,
-      showRusty: false
-    }
-  }
-
-  render() {
-    return(
-      <div>
-        <Row>
-          <LogoRowItem>
-            <img src={logo} alt="logo" className="logo-img" />
-          </LogoRowItem>
-        </Row>
-        <Row>
-          <RowItem>
-            <DropdownButton title='Genre' id='genre' size='lg' drop='up' variant='secondary' block>
-              <Dropdown.Item href="#/action-1">Pop</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Rock</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Punk</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Emo</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Folk</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Electronic</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Soundtrack</Dropdown.Item>
-            </DropdownButton>
-          </RowItem>
-          <RowItem>
-          <DropdownButton title='Decade' id='decade' size='lg' drop='up' variant='secondary' block>
-              <Dropdown.Item href="#/action-1">1960s</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">1970s</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">1980s</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">1990s</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">2000s</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">2010s</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">2020s</Dropdown.Item>
-            </DropdownButton>
-          </RowItem>
-          <RowItem style={alignRightStyle}>
-            <ToggleContainer>
-              <Toggle value={this.state.showFavorites} id='favorites' />
-              <ToggleLabel htmlFor='favorites'>Favorites</ToggleLabel>
-            </ToggleContainer>
-          </RowItem>
-          <RowItem style={alignRightStyle}>
-            <ToggleContainer>
-              <Toggle value={this.state.showFavorites} id='favorites' />
-              <ToggleLabel htmlFor='favorites'>I'm Rusty</ToggleLabel>
-            </ToggleContainer>
-          </RowItem>
-        </Row>
-      </div>
-    )
-  }
+const FiltersAndLogo = ({handleClick, handleFavoriteChange, handleRustyChange, genreFilter, decadeFilter, showFavorites, showRusty}) => {
+  return(
+    <div>
+      <Row>
+        <LogoRowItem>
+          <img src={logo} alt="logo" className="logo-img" />
+        </LogoRowItem>
+      </Row>
+      <Row>
+        <RowItem>
+          <DropdownButton title='Genre' id='genre' size='lg' drop='up' variant='secondary' onClick={handleClick}>
+            <Dropdown.Item href="#/action-1">Pop</Dropdown.Item>
+            <Dropdown.Item href="#/action-2">Rock</Dropdown.Item>
+            <Dropdown.Item href="#/action-2">Punk</Dropdown.Item>
+            <Dropdown.Item href="#/action-2">Emo</Dropdown.Item>
+            <Dropdown.Item href="#/action-3">Folk</Dropdown.Item>
+            <Dropdown.Item href="#/action-3">Electronic</Dropdown.Item>
+            <Dropdown.Item href="#/action-3">Soundtrack</Dropdown.Item>
+          </DropdownButton>
+        </RowItem>
+        <RowItem>
+        <DropdownButton title='Decade' id='decade' size='lg' drop='up' variant='secondary'>
+            <Dropdown.Item href="#/action-1">1960s</Dropdown.Item>
+            <Dropdown.Item href="#/action-2">1970s</Dropdown.Item>
+            <Dropdown.Item href="#/action-2">1980s</Dropdown.Item>
+            <Dropdown.Item href="#/action-2">1990s</Dropdown.Item>
+            <Dropdown.Item href="#/action-3">2000s</Dropdown.Item>
+            <Dropdown.Item href="#/action-3">2010s</Dropdown.Item>
+            <Dropdown.Item href="#/action-3">2020s</Dropdown.Item>
+          </DropdownButton>
+        </RowItem>
+        <RowItem style={alignRightStyle}>
+          <ToggleContainer>
+            <Toggle checked={showFavorites} onChange={handleFavoriteChange} id='showFavorites' />
+            <ToggleLabel htmlFor='favorites'>Favorites</ToggleLabel>
+          </ToggleContainer>  
+        </RowItem>
+        <RowItem style={alignRightStyle}>
+          <ToggleContainer>
+            <Toggle checked={showRusty} onChange={handleRustyChange} id='showRusty' />
+            <ToggleLabel htmlFor='rusty'>Been a Bit</ToggleLabel>
+          </ToggleContainer>
+        </RowItem>
+      </Row>
+    </div>
+  )
 }
 
 export default FiltersAndLogo;

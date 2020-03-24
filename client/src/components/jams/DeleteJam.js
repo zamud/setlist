@@ -26,7 +26,6 @@ class DeleteJam extends Component {
 
   render() {
     if(this.state.isDeleted) {
-      setTimeout(console.log("DELETED"), 5000)
       return (
         <Redirect to='/' />
       )
