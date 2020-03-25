@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from "react-router-dom";
 import styled from 'styled-components';
 import api from '../../api';
+import { capitalizeFirstLetter, capos, genres, decades } from '../../app/utils';
 
 const JamContainer = styled.div.attrs({
   className: 'jumbotron',
@@ -11,17 +12,23 @@ const JamContainer = styled.div.attrs({
   width: 72%;
 `
 
+
+
 class CreateJam extends Component {
-  state = {
-    title: "",
-    artist: "",
-    genre: "",
-    decade: 0,
-    isFavorite: false,
-    myCapo: 0,
-    tabLink: "",
-    vidLink: "",
-    lastPlayed: Date.now()
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      title: "",
+      artist: "",
+      genre: "",
+      decade: 0,
+      isFavorite: false,
+      myCapo: 0,
+      tabLink: "",
+      vidLink: "",
+      lastPlayed: Date.now()
+    }
   }
 
   handleChange = event => {
@@ -73,27 +80,14 @@ class CreateJam extends Component {
               <label htmlFor="decade">Decade</label>
               <select defaultValue="" id="decade" className="form-control" onChange={this.handleChange}>
                 <option value="" disabled>Choose a decade</option>
-                <option value="2010">2010s</option>
-                <option value="2000">2000s</option>
-                <option value="1990">1990s</option>
-                <option value="1980">1980s</option>
-                <option value="1970">1970s</option>
-                <option value="1960">1960s</option>
-                <option value="1950">1950s</option>
+                { decades.map(decade => <option value={decade}>{decade}s</option>) }
               </select>
             </div>
             <div className="col m4 s12 form-group">
               <label htmlFor="genre">Genre</label>
-              <select multiple defaultValue={['']} className="form-control" id="genre" onChange={this.handleChange}>
+              <select defaultValue={''} className="form-control" id="genre" onChange={this.handleChange}>
                 <option value="" disabled>Choose genre(s)</option>
-                <option value="pop">Pop</option>
-                <option value="rock">Rock</option>
-                <option value="punk">Punk</option>
-                <option value="emo">Emo</option>
-                <option value="folk">Folk</option>
-                <option value="country">Country</option>
-                <option value="electronic">Electronic</option>
-                <option value="soundtrack">Soundtrack</option>
+                { genres.map(genre => <option value={genre}>{capitalizeFirstLetter(genre)}</option>) }
               </select>
             </div>
             <div className="col m2 s6 form-group">
@@ -101,15 +95,7 @@ class CreateJam extends Component {
               <select id="myCapo" className="form-control" onChange={this.handleChange}>
                 <option value="" disabled>Preferred capo position</option>
                 <option value="0">No capo</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
+                { capos.map(capo =>  capo>0 && <option value={capo.toString}>{capo}</option>) }
               </select>
             </div>
             <div className="col m2 s6 input-field">

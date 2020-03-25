@@ -23,11 +23,6 @@ const Links = () => {
       <Collapse>
         <List>
           <Item>
-            <Link to = '/' className="nav-link">
-              Jams
-            </Link>
-          </Item>
-          <Item>
             <Link to = '/create' className="nav-link">
               Create Jam
             </Link>

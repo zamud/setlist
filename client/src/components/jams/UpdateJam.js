@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import styled from 'styled-components';
 import api from '../../api';
+import { capitalizeFirstLetter, capos, genres, decades } from '../../app/utils';
 
 const JamContainer = styled.div.attrs({
   className: 'jumbotron',
@@ -10,6 +11,10 @@ const JamContainer = styled.div.attrs({
   margin-left: 14%;
   width: 72%;
 `
+
+const marginTop = {
+  marginTop: '10px'
+}
 
 class UpdateJam extends Component {
   state = {
@@ -26,8 +31,6 @@ class UpdateJam extends Component {
   componentDidMount = async() => {
     await api.getJamWithID(this.props.match.params.id)
       .then((jam) => {
-        console.log("GOT THE JAM");
-        console.log(jam);
         this.setState({
           title: jam.data.title,
           artist: jam.data.artist,
@@ -36,7 +39,8 @@ class UpdateJam extends Component {
           isFavorite: jam.data.isFavorite,
           myCapo: jam.data.myCapo,
           tabLink: jam.data.tabLink,
-          vidLink: jam.data.vidLink
+          vidLink: jam.data.vidLink,
+          id: jam.data._id
         });
       });
   }
@@ -90,27 +94,14 @@ class UpdateJam extends Component {
               <label htmlFor="decade">Decade</label>
               <select defaultValue="" id="decade" className="form-control" value={this.state.decade} onChange={this.handleChange}>
                 <option value="" disabled>Choose a decade</option>
-                <option value="2010">2010s</option>
-                <option value="2000">2000s</option>
-                <option value="1990">1990s</option>
-                <option value="1980">1980s</option>
-                <option value="1970">1970s</option>
-                <option value="1960">1960s</option>
-                <option value="1950">1950s</option>
+                { decades.map(decade => <option value={decade}>{decade}s</option>) }
               </select>
             </div>
             <div className="col m4 s12 form-group">
               <label htmlFor="genre">Genre</label>
-              <select multiple defaultValue={['']} className="form-control" id="genre" value={this.state.genre} onChange={this.handleChange}>
+              <select defaultValue={['']} className="form-control" id="genre" value={this.state.genre} onChange={this.handleChange}>
                 <option value="" disabled>Choose genre(s)</option>
-                <option value="pop">Pop</option>
-                <option value="rock">Rock</option>
-                <option value="punk">Punk</option>
-                <option value="emo">Emo</option>
-                <option value="folk">Folk</option>
-                <option value="country">Country</option>
-                <option value="electronic">Electronic</option>
-                <option value="soundtrack">Soundtrack</option>
+                { genres.map(genre => <option value={genre}>{capitalizeFirstLetter(genre)}</option>) }
               </select>
             </div>
             <div className="col m2 s6 form-group">
@@ -118,15 +109,7 @@ class UpdateJam extends Component {
               <select id="myCapo" className="form-control" value={this.state.myCapo} onChange={this.handleChange}>
                 <option value="" disabled>Preferred capo position</option>
                 <option value="0">No capo</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
+                { capos.map(capo =>  capo>0 && <option value={capo.toString}>{capo}</option>) }
               </select>
             </div>
             <div className="col m2 s6 input-field">
@@ -154,6 +137,9 @@ class UpdateJam extends Component {
           <br />
           <button className="btn btn-primary">Submit</button>
         </form>
+        <Link to={`/jams/${this.state.id}`}>
+          <button className="btn btn-secondary" style={marginTop}>Cancel</button>
+        </Link>
       </JamContainer>
     )
   }

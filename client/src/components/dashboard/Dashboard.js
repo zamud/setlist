@@ -21,7 +21,8 @@ class Dashboard extends Component {
       showFavorites: false,
       showRusty: false
     };
-    this.handleClick = this.handleClick.bind(this);
+    this.handleGenreSelect = this.handleGenreSelect.bind(this);
+    this.handleGenreSelect = this.handleGenreSelect.bind(this);
     this.handleFavoriteChange = this.handleFavoriteChange.bind(this);
     this.handleRustyChange = this.handleRustyChange.bind(this);
   }
@@ -36,10 +37,6 @@ class Dashboard extends Component {
       });
   }
 
-  handleClick = event => {
-    event.preventDefault();
-  }
-
   handleFavoriteChange = () => {
     this.setState(prevState => ({
         showFavorites: !prevState.showFavorites
@@ -50,15 +47,28 @@ class Dashboard extends Component {
     this.setState(prevState => ({
       showRusty: !prevState.showRusty
     }));
-}
+  }
+
+  handleGenreSelect = (genre) => {
+    this.setState({
+      genreFilter: genre
+    });
+  }
+
+  handleDecadeSelect = (decade) => {
+    this.setState({
+      decadeFilter: parseInt(decade)
+    });
+  }
 
   render () {
     return(
       <MainContainer>
         <FiltersAndLogo 
-          handleClick={this.handleClick}
           handleFavoriteChange={this.handleFavoriteChange}
           handleRustyChange={this.handleRustyChange}
+          handleGenreSelect={this.handleGenreSelect}
+          handleDecadeSelect={this.handleDecadeSelect}
           genreFilter={this.state.genreFilter}
           decadeFilter={this.state.decadeFilter}
           showFavorites={this.state.showFavorites}

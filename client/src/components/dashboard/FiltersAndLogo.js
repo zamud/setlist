@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { DropdownButton, Dropdown } from 'react-bootstrap';
 import Toggle from 'react-toggle';
 import "react-toggle/style.css"
 import logo from '../../img/setlist-logo-black-center.png';
 import styled from 'styled-components';
+import { capitalizeFirstLetter, genres, decades } from '../../app/utils';
 
 const Row = styled.div.attrs({
   className: 'row',
@@ -13,7 +14,28 @@ const RowItem = styled.div.attrs({
   className: 'col-md-3',
 })`
   margin-top: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
+`
+
+const FilterDisplay = styled.div.attrs({})`
+  margin-left: 5%;
+  margin-top: 5px;
+  text-align: center;
+  background-color: rgba(0, 255, 0, 0.5);
+  font-weight: bold;
+  border-radius: 15px;
+  width: 30%;
+  height: 1.5rem;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+`
+
+const Placeholder = styled.div.attrs({})`
+  margin-left: 5%;
+  margin-top: 5px;
+  width: 30%;
+  height: 1.5rem;
+  visibility: hidden;
 `
 
 const alignRightStyle = {
@@ -26,10 +48,6 @@ const LogoRowItem = styled.div.attrs({
   text-align: center;
   margin-top: 30px;
 `
-
-const FilterButton = styled.button.attrs({
-  className: 'btn btn-secondary btn-lg btn-block',
-})``
 
 const ToggleContainer = styled.div.attrs({
   className: 'align-self-center'
@@ -49,7 +67,11 @@ const ToggleLabel = styled.label.attrs({})`
   margin-left: 10px;
 `
 
-const FiltersAndLogo = ({handleClick, handleFavoriteChange, handleRustyChange, genreFilter, decadeFilter, showFavorites, showRusty}) => {
+const blockStyle = {
+  display: 'block'
+}
+
+const FiltersAndLogo = ({handleGenreSelect, handleDecadeSelect, handleFavoriteChange, handleRustyChange, genreFilter, decadeFilter, showFavorites, showRusty}) => {
   return(
     <div>
       <Row>
@@ -59,26 +81,26 @@ const FiltersAndLogo = ({handleClick, handleFavoriteChange, handleRustyChange, g
       </Row>
       <Row>
         <RowItem>
-          <DropdownButton title='Genre' id='genre' size='lg' drop='up' variant='secondary' onClick={handleClick}>
-            <Dropdown.Item href="#/action-1">Pop</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Rock</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Punk</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Emo</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">Folk</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">Electronic</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">Soundtrack</Dropdown.Item>
+          <DropdownButton title='Genre' id='genre' size='lg' drop='up' variant='secondary' onSelect={handleGenreSelect} style={blockStyle}>
+            <Dropdown.Item eventKey=''>All</Dropdown.Item>
+            { genres.map(genre => <Dropdown.Item eventKey={genre}>{capitalizeFirstLetter(genre)}</Dropdown.Item>) }
           </DropdownButton>
+          {
+            genreFilter
+            ? <FilterDisplay>{capitalizeFirstLetter(genreFilter)}</FilterDisplay>
+            : <Placeholder />
+          }
         </RowItem>
         <RowItem>
-        <DropdownButton title='Decade' id='decade' size='lg' drop='up' variant='secondary'>
-            <Dropdown.Item href="#/action-1">1960s</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">1970s</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">1980s</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">1990s</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">2000s</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">2010s</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">2020s</Dropdown.Item>
+        <DropdownButton title='Decade' id='decade' size='lg' drop='up' variant='secondary' onSelect={handleDecadeSelect}>
+            <Dropdown.Item eventKey=''>All</Dropdown.Item>
+            { decades.map(decade => <Dropdown.Item eventKey={decade.toString}>{decade}s</Dropdown.Item>) }
           </DropdownButton>
+          {
+            decadeFilter
+            ? <FilterDisplay>{`${decadeFilter.toString()}s`}</FilterDisplay>
+            : <Placeholder />
+          }
         </RowItem>
         <RowItem style={alignRightStyle}>
           <ToggleContainer>
