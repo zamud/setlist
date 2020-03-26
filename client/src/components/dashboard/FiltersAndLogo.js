@@ -85,22 +85,14 @@ const FiltersAndLogo = ({handleGenreSelect, handleDecadeSelect, handleFavoriteCh
             <Dropdown.Item eventKey=''>All</Dropdown.Item>
             { genres.map(genre => <Dropdown.Item eventKey={genre}>{capitalizeFirstLetter(genre)}</Dropdown.Item>) }
           </DropdownButton>
-          {
-            genreFilter
-            ? <FilterDisplay>{capitalizeFirstLetter(genreFilter)}</FilterDisplay>
-            : <Placeholder />
-          }
+          { genreFilter ? <FilterDisplay>{capitalizeFirstLetter(genreFilter)}</FilterDisplay> : <Placeholder /> }
         </RowItem>
         <RowItem>
         <DropdownButton title='Decade' id='decade' size='lg' drop='up' variant='secondary' onSelect={handleDecadeSelect}>
             <Dropdown.Item eventKey=''>All</Dropdown.Item>
             { decades.map(decade => <Dropdown.Item eventKey={decade.toString}>{decade}s</Dropdown.Item>) }
           </DropdownButton>
-          {
-            decadeFilter
-            ? <FilterDisplay>{`${decadeFilter.toString()}s`}</FilterDisplay>
-            : <Placeholder />
-          }
+          { decadeFilter ? <FilterDisplay>{`${decadeFilter.toString()}s`}</FilterDisplay> : <Placeholder /> }
         </RowItem>
         <RowItem style={alignRightStyle}>
           <ToggleContainer>
