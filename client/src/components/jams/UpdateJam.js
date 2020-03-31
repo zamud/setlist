@@ -3,6 +3,8 @@ import { Redirect, Link } from "react-router-dom";
 import styled from 'styled-components';
 import api from '../../api';
 import { capitalizeFirstLetter, capos, genres, decades } from '../../app/utils';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 const JamContainer = styled.div.attrs({
   className: 'jumbotron',
@@ -16,19 +18,33 @@ const marginTop = {
   marginTop: '10px'
 }
 
+const validationSchema = Yup.object({
+  title: Yup.string().required(),
+  artist: Yup.string().required(),
+  genre: Yup.string().required(),
+  decade: Yup.number().required(),
+  tabLink: Yup.string().url(),
+  vidLink: Yup.string().url()
+})
+
 class UpdateJam extends Component {
-  state = {
-    title: "",
-    artist: "",
-    genre: "",
-    decade: 0,
-    isFavorite: false,
-    myCapo: 0,
-    tabLink: "",
-    vidLink: ""
+  constructor(props) {
+    super(props);
+    this.state = {
+      jamUpdated: false,
+      title: "",
+      artist: "",
+      genre: "",
+      decade: "",
+      isFavorite: "",
+      myCapo: "",
+      tabLink: "",
+      vidLink: "",
+      id: ""
+    };
   }
 
-  componentDidMount = async() => {
+  componentDidMount = async () => {
     await api.getJamWithID(this.props.match.params.id)
       .then((jam) => {
         this.setState({
@@ -45,101 +61,102 @@ class UpdateJam extends Component {
       });
   }
 
-  handleChange = event => {
-    if(event.target.id === 'isFavorite') {
-      if(event.target.value === 'on') {
-        this.setState({
-          [event.target.id]: true
-        });
-      }
-    } else {
-      this.setState({
-        [event.target.id]: event.target.value
-      });
-    }
-  }
-
-  handleSubmit =  async event => {
-    event.preventDefault();
-    await api.updateJam(this.props.match.params.id, this.state)
-      .then(res => 
-          this.setState({
-          title: "JAMUPDATED"
-        })
-      );
-  }
-
   render() {
-    if(this.state.title === "JAMUPDATED") {
+    if(this.state.jamUpdated) {
       return (
-        <Redirect to='/' />
+        <Redirect to={`/jams/${this.props.match.params.id}`} />
       )
     }
+    let {title, artist, genre, decade, isFavorite, myCapo, tabLink, vidLink} = this.state
     return(
       <JamContainer>
-        <h4>Edit {this.state.title}</h4>
-        <form onSubmit={this.handleSubmit}>
-          <div className="row">
-            <div className="col m6 s12 form-group">
-              <label htmlFor="title">Title:</label>
-              <input type="text" id="title" className="form-control" value={this.state.title} onChange={this.handleChange}/>
-            </div>
-            <div className="col m6 s12 form-group">
-              <label htmlFor="artist">Artist:</label>
-              <input type="text" id="artist" className="form-control" value={this.state.artist} onChange={this.handleChange}/>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col m4 s12 form-group">
-              <label htmlFor="decade">Decade</label>
-              <select defaultValue="" id="decade" className="form-control" value={this.state.decade} onChange={this.handleChange}>
-                <option value="" disabled>Choose a decade</option>
-                { decades.map(decade => <option value={decade}>{decade}s</option>) }
-              </select>
-            </div>
-            <div className="col m4 s12 form-group">
-              <label htmlFor="genre">Genre</label>
-              <select defaultValue={['']} className="form-control" id="genre" value={this.state.genre} onChange={this.handleChange}>
-                <option value="" disabled>Choose genre(s)</option>
-                { genres.map(genre => <option value={genre}>{capitalizeFirstLetter(genre)}</option>) }
-              </select>
-            </div>
-            <div className="col m2 s6 form-group">
-            <label htmlFor="myCapo">MyCapo</label>
-              <select id="myCapo" className="form-control" value={this.state.myCapo} onChange={this.handleChange}>
-                <option value="" disabled>Preferred capo position</option>
-                <option value="0">No capo</option>
-                { capos.map(capo =>  capo>0 && <option value={capo.toString}>{capo}</option>) }
-              </select>
-            </div>
-            <div className="col m2 s6 input-field">
-              <div className="grey-text lighten-1">Favorite?</div>
-              <div className="custom-control custom-switch">
-                {
-                  (this.state.isFavorite)
-                    ? <input type="checkbox" className="custom-control-input" id="isFavorite" onChange={this.handleChange} checked />
-                    : <input type="checkbox" className="custom-control-input" id="isFavorite" onChange={this.handleChange} />
-                }
-                <label className="custom-control-label" htmlFor="isFavorite"></label>
+        <h4>Edit {title}</h4>
+        <Formik
+          initialValues={{
+            title: title,
+            artist: artist,
+            genre: genre,
+            decade: decade,
+            isFavorite: isFavorite,
+            myCapo: myCapo,
+            tabLink: tabLink,
+            vidLink: vidLink
+          }}
+          enableReinitialize
+          validationSchema={validationSchema}
+          onSubmit = {async (values) => {
+            await api.updateJam(this.props.match.params.id, values)
+              .then(res => 
+                  this.setState({
+                  jamUpdated: true
+                }));
+            }
+          }>
+          {({ handleChange, handleSubmit, handleReset, values, errors }) => (
+            <form onSubmit={handleSubmit}>
+              <div className="row">
+                <div className="col m6 s12 form-group">
+                  <label htmlFor="title">Title:</label>
+                  <input type="text" id="title" value={values.title} className="form-control" onChange={handleChange}/>
+                  {errors.title ? errors.title : null}
+                </div>
+                <div className="col m6 s12 form-group">
+                  <label htmlFor="artist">Artist:</label>
+                  <input type="text" id="artist" value={values.artist} className="form-control" onChange={handleChange}/>
+                  {errors.artist ? errors.artist : null}
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col m6 s12 input-field">
-              <label htmlFor="title">Tab URL:</label>
-              <input placeholder="Link to your favorite tab..." id="tabLink" type="text" className="form-control" onChange={this.handleChange}/>
-            </div>
-            <div className="col m6 s12 input-field">
-              <label htmlFor="title">Video URL:</label>
-              <input placeholder="Link to your favorite tutorial or music video..." id="vidLink" type="text" className="form-control" onChange={this.handleChange}/>
-            </div>
-          </div>
-          <br />
-          <button className="btn btn-primary">Submit</button>
-        </form>
-        <Link to={`/jams/${this.state.id}`}>
-          <button className="btn btn-secondary" style={marginTop}>Cancel</button>
-        </Link>
+              <div className="row">
+                <div className="col m4 s12 form-group">
+                  <label htmlFor="decade">Decade</label>
+                  <select value={values.decade} id="decade" className="form-control" onChange={handleChange}>
+                    <option value="" disabled>Choose a decade</option>
+                    { decades.map(decade => <option value={decade}>{decade}s</option>) }
+                  </select>
+                  {errors.decade ? errors.decade : null}
+                </div>
+                <div className="col m4 s12 form-group">
+                  <label htmlFor="genre">Genre</label>
+                  <select value={values.genre} className="form-control" id="genre" onChange={handleChange}>
+                    <option value="" disabled>Choose genre(s)</option>
+                    { genres.map(genre => <option value={genre}>{capitalizeFirstLetter(genre)}</option>) }
+                  </select>
+                  {errors.genre ? errors.genre : null}
+                </div>
+                <div className="col m2 s6 form-group">
+                <label htmlFor="myCapo">MyCapo</label>
+                  <select id="myCapo" className="form-control" onChange={handleChange}>
+                    <option value="" disabled>Preferred capo position</option>
+                    <option value="0">No capo</option>
+                    { capos.map(capo =>  capo>0 && <option value={capo.toString()}>{capo}</option>) }
+                  </select>
+                </div>
+                <div className="col m2 s6 input-field">
+                  <div className="grey-text lighten-1">Favorite?</div>
+                  <div className="custom-control custom-switch">
+                    <input type="checkbox" className="custom-control-input" id="isFavorite" onChange={handleChange} />
+                    <label className="custom-control-label" htmlFor="isFavorite"></label>
+                  </div>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col m6 s12 input-field">
+                  <label htmlFor="tabLink">Tab URL:</label>
+                  <input id="tabLink" value={values.tabLink} type="text" className="form-control" onChange={handleChange}/>
+                  {errors.tabLink ? errors.tabLink : null}
+                </div>
+                <div className="col m6 s12 input-field">
+                  <label htmlFor="vidLink">Video URL:</label>
+                  <input id="vidLink" value={values.vidLink} type="text" className="form-control" onChange={handleChange}/>
+                  {errors.vidLink ? errors.vidLink : null}
+                </div>
+              </div>
+              <br />
+              <button className="btn btn-primary">Submit</button>&nbsp;&nbsp;
+              <button className="btn btn-secondary" onClick={handleReset}>Start Over</button>
+            </form>
+          )}
+          </Formik>
       </JamContainer>
     )
   }

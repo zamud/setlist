@@ -56,6 +56,7 @@ class Dashboard extends Component {
   }
 
   handleDecadeSelect = (decade) => {
+    console.log(decade);
     this.setState({
       decadeFilter: parseInt(decade)
     });

@@ -14,11 +14,6 @@ const JamContainer = styled.div.attrs({
   width: 72%;
 `
 
-const ErrorMessage = styled.div.attrs({
-  className: 'alert alert-danger',
-  role: 'alert'
-})
-
 const validationSchema = Yup.object({
   title: Yup.string().required(),
   artist: Yup.string().required(),
@@ -101,7 +96,7 @@ class CreateJam extends Component {
                   <select id="myCapo" className="form-control" onChange={handleChange}>
                     <option value="" disabled>Preferred capo position</option>
                     <option value="0">No capo</option>
-                    { capos.map(capo =>  capo>0 && <option value={capo.toString}>{capo}</option>) }
+                    { capos.map(capo =>  capo>0 && <option value={capo.toString()}>{capo}</option>) }
                   </select>
                 </div>
                 <div className="col m2 s6 input-field">
