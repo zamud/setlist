@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./src/data/db');
 const routes = require('./src/routes/jam-routes');
+const path = require('path');
 
 const app = express();
 const apiPort = 3000;
@@ -10,6 +11,7 @@ const apiPort = 3000;
 app.use(bodyParser.urlencoded( {extended: true }));
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'client/build')))
 
 routes(app);
 
