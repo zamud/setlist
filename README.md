@@ -30,7 +30,7 @@ This is the main page for a Jam, displaying its associated data and tutorials.  
 ### Create Jam
 ![createjam](client/public/screenshots/createjam.PNG)
 Accessed via the nav bar, this is where the user enters Jam data:
-* [`Formik`](https://github.com/jaredpalmer/formik) is used to handle form updates, validation, and submission
+* [`Formik`](https://github.com/jaredpalmer/formik) is used to handle form updates, validation (using [`Yup`](https://github.com/jquense/yup)), and submission
     - See the error message for required fields and URL format in the image
     - **Start Over** clears all inputs and provides a clean slate
 * **Submit** adds the Jam to the database via API call.  The user would then see it on the Dashboard
