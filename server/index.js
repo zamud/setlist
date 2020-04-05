@@ -11,7 +11,7 @@ const apiPort = 3000;
 app.use(bodyParser.urlencoded( {extended: true }));
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'client/build')))
+app.use(express.static(path.join(__dirname, '../client/build')))
 
 routes(app);
 
@@ -19,6 +19,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 app.get('/', (req, res) => {
   res.send(`Server is running on port ${apiPort}`);
+  res.sendFile(path.join(__dirname + '../client/build/index.html'));
 });
 
 app.listen(apiPort, () => {
